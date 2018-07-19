@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bảng điều khiển hệ thống</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <style>
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 60px;
+          height: 34px;
+        }
+        
+        .switch input {display:none;}
+        
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 26px;
+          width: 26px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        
+        input:checked + .slider {
+          background-color: #2196F3;
+        }
+        
+        input:focus + .slider {
+          box-shadow: 0 0 1px #2196F3;
+        }
+        
+        input:checked + .slider:before {
+          -webkit-transform: translateX(26px);
+          -ms-transform: translateX(26px);
+          transform: translateX(26px);
+        }
+        
+        /* Rounded sliders */
+        .slider.round {
+          border-radius: 34px;
+        }
+        
+        .slider.round:before {
+          border-radius: 50%;
+        }
+        </style>
+          <script>
+          function controllerSystem(event) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "http://localhost:3000/post", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            let status = event.target.checked ? 1 : 0;
+            
+            xhttp.send("deviceId=" + event.target.value + "&status=" + status);
+            xhttp.onreadystatechange = function() {
+              if (xhttp.readyState === 4) {
+                console.warn(xhttp.response);
+              }
+            }
+          }
+          </script>
+          
+</head>
+<body>
+    <div class="container">  
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Tên đơn vị</th>
+              <th>Ngày cài đặt</th>
+              <th>Số quầy</th>
+              <th>Số máy lấy số</th>
+              <th>Số màn hiển thị</th>
+              <th>Trạng thái hoạt động</th>
+            </tr>
+          </thead>
+          <tbody>         
+            <% for(var i=0; i<data.length; i++) { %>
+                <% let deviceId = data[i].deviceId %>
+                <tr>
+                  <td><%= i%></td> 
+                  <td><%= data[i].nameUnit %></td>
+                  <td>11111</td>
+                  <td><%= data[i].numberOfCounter %></td>
+                  <td><%= data[i].numberOfNumMachine %></td>
+                  <td><%= data[i].numberOfDisplayTablet %></td>
+                  <td>
+                      <label class="switch">
+                          <input onchange="controllerSystem.call(this, event)" value="<%= deviceId %>" type="checkbox" checked="<%= data[i].status %>">
+                          <span class="slider round"></span>
+                      </label>
+                  </td>
+                </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      
+</body>
+</html>
